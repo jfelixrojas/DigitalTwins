@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0",
+  "sumo_version": "1.28.0",
+  "seed": 42,
+  "demand_end_s": 900,
+  "simulation_end_s": 1800,
+  "step_length_s": 1,
+  "aggregation_period_s": 60,
+  "arrival_rule": "Periodic arrivals at begin_s + k * 3600/rate_veh_h, strictly before demand_end_s; no resampling or rejected-trip substitution.",
+  "route_rule": "Strict duarouter on the unchanged network, fixed OD, passenger, single routing thread; route sequences are retained explicitly.",
+  "vehicle_type": {"id": "controlled_passenger", "vClass": "passenger", "speedFactor": "1.0", "speedDev": "0"},
+  "classification": "Synthetic demand and assumed driver parameters; no real observations.",
+  "streams": [
+    {"id": "W_E", "description": "Roosevelt oeste a este, recorrido completo", "from": "198404000", "to": "1225540290#2", "rate_veh_h": 180, "begin_s": 0},
+    {"id": "E_W", "description": "Roosevelt este a oeste, recorrido completo", "from": "1255704511#0", "to": "54144834", "rate_veh_h": 180, "begin_s": 10},
+    {"id": "N_W", "description": "33 Avenida, entrada norte, a Roosevelt oeste", "from": "24556748#0", "to": "54144834", "rate_veh_h": 60, "begin_s": 5},
+    {"id": "E_N", "description": "Roosevelt este hacia salida norte de Boulevard de los Héroes", "from": "1255704511#0", "to": "179733827#1", "rate_veh_h": 60, "begin_s": 15},
+    {"id": "N_E", "description": "Juan Pablo II desde el este hacia Roosevelt este", "from": "141164180#0", "to": "1225540290#2", "rate_veh_h": 60, "begin_s": 20},
+    {"id": "W_S", "description": "Roosevelt oeste hacia 45 Avenida Sur", "from": "198404000", "to": "198404004#1", "rate_veh_h": 60, "begin_s": 25}
+  ],
+  "future_closure_candidates": ["1257993561#5", "54144826#5"]
+}

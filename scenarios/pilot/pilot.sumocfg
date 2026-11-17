@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <input>
+        <net-file value="../../outputs/pilot/pilot.net.xml"/>
+        <route-files value="../../outputs/pilot/pilot.rou.xml"/>
+    </input>
+    <time>
+        <begin value="0"/>
+        <end value="1800"/>
+    </time>
+    <random_number>
+        <seed value="42"/>
+    </random_number>
+    <output>
+        <tripinfo-output value="../../outputs/pilot/tripinfo.xml"/>
+        <summary-output value="../../outputs/pilot/summary.xml"/>
+    </output>
+</configuration>

@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "reference": "outputs/pilot_controlled_verified",
+  "sumo_version": "1.28.0",
+  "closed_edge": "1257993561#5",
+  "closed_class": "passenger",
+  "begin_s": 0,
+  "end_s": 1800,
+  "trigger_edges": ["198404000"],
+  "routing_mode_closure": 8,
+  "assignment": "Original routes as input; one hard closingReroute recomputes only routes containing the closed edge, before detour branches. No periodic routing device is added.",
+  "permission_policy": "Retain original lane disallowed classes and add passenger; all target lanes must have equal original permissions.",
+  "classification": "Synthetic isolated counterfactual; no real traffic observations or calibration."
+}

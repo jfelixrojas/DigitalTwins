@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0",
+  "inventory_date_local": "2026-11-16",
+  "timezone": "America/Bogota",
+  "scope": "DigitalTwins intervention 001; existing local sources, no downloads",
+  "resolution": "Resolve path_from_dc_x relative to DigitalTwins.parent. Original sources are read-only.",
+  "recommended_source_id": "osm-sv-pbf-20261014",
+  "pilot_candidate": {
+    "name": "Alameda Franklin Delano Roosevelt y entorno, San Salvador",
+    "bbox_crs84": [
+      -89.216,
+      13.699,
+      -89.207,
+      13.705
+    ],
+    "selection": "candidate, not a calibrated scenario",
+    "ways_with_at_least_one_indexed_node_inside": 289,
+    "named_roosevelt_ways_with_at_least_one_indexed_node_inside": 13
+  },
+  "sources": [
+    {
+      "id": "osm-sv-pbf-20261014",
+      "path_from_dc_x": "savia-x-lab/integration/g-topo-x68-002/20261015-offline01/resource/el-salvador-261014.osm.pbf",
+      "absolute_path_at_inventory": "/Users/josefelix/Desktop/DC_X/savia-x-lab/integration/g-topo-x68-002/20261015-offline01/resource/el-salvador-261014.osm.pbf",
+      "format": "OSM_PBF",
+      "size_bytes": 35168934,
+      "sha256": "73369769b9a7f45dd9f0b3a44511da0c29101c7268805b9c9f415114a6c27672",
+      "data_as_of": "2026-10-14T20:21:12Z",
+      "country_code": "SV",
+      "coordinate_order": "longitude,latitude",
+      "license": "ODbL-1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "attribution": "© OpenStreetMap contributors",
+      "processor": "Geofabrik GmbH",
+      "role": "primary_sumo_input",
+      "source_url": "https://download.geofabrik.de/central-america/el-salvador-261014.osm.pbf",
+      "access": "read_only",
+      "acquisition_receipt_from_dc_x": "savia-x-lab/integration/g-topo-x68-002/20261015-offline01/resource/ACQUISITION_RECEIPT.json",
+      "snapshot_metadata_from_dc_x": "savia-x-lab/integration/g-topo-x68-002/20261015-offline01/RESOURCE_SNAPSHOT_PBF.json",
+      "retrieved_at": "2026-10-15T22:20:04.940353+00:00",
+      "declared_bbox_crs84": [
+        -90.50091,
+        12.03598,
+        -87.584382,
+        14.457621
+      ]
+    },
+    {
+      "id": "osm-sv-topology-20261014",
+      "path_from_dc_x": "savia-x-lab/integration/g-topo-x68-002/20261015-offline01/resource/topology-osm-v1.sqlite",
+      "absolute_path_at_inventory": "/Users/josefelix/Desktop/DC_X/savia-x-lab/integration/g-topo-x68-002/20261015-offline01/resource/topology-osm-v1.sqlite",
+      "format": "SQLITE",
+      "size_bytes": 127836160,
+      "sha256": "eb543319cc6d44e8eb84ba44b63c92eeb0fa715f1653daab3cba3e72e03a2aed",
+      "data_as_of": "2026-10-14T20:21:12Z",
+      "country_code": "SV",
+      "coordinate_order": "longitude,latitude",
+      "license": "ODbL-1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "attribution": "© OpenStreetMap contributors",
+      "processor": "Geofabrik GmbH",
+      "role": "diagnostic_only_not_turn_restriction_router",
+      "source_url": null,
+      "access": "read_only",
+      "derived_from": "osm-sv-pbf-20261014",
+      "transformer_from_dc_x": "savia-x-b1/extensions/g_topo_x68_v1/topology_pbf.py",
+      "transformer_sha256": "67171c46bb5b017d0bb89036cf2de827b7820d4dbb78bb1c4a9d1b046fe1561b",
+      "version": "G_OSM_PBF_TOPOLOGY_V1",
+      "observed_road_nodes_bbox_crs84": [
+        -90.1963443,
+        13.1567127,
+        -87.5611159,
+        14.4653944
+      ]
+    },
+    {
+      "id": "osm-sv-gpkg-20260823",
+      "path_from_dc_x": "x_red_social/data/savia_x/reference/operational/geography/source/el-salvador.gpkg",
+      "absolute_path_at_inventory": "/Users/josefelix/Desktop/DC_X/x_red_social/data/savia_x/reference/operational/geography/source/el-salvador.gpkg",
+      "format": "GEOPACKAGE",
+      "size_bytes": 196194304,
+      "sha256": "6ad7bcc0d2b8801e9f00871108d3953feff8fabcce71288b8c0e10ea25fe45f8",
+      "data_as_of": "2026-08-23T20:21:36Z",
+      "country_code": "SV",
+      "coordinate_order": "longitude,latitude",
+      "license": "ODbL-1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "attribution": "© OpenStreetMap contributors",
+      "processor": "Geofabrik GmbH",
+      "role": "cartographic_reference",
+      "source_url": "https://download.geofabrik.de/central-america/el-salvador-260823-free.gpkg.zip",
+      "access": "read_only",
+      "manifest_from_dc_x": "x_red_social/config/savia_x/operational/geography/source_manifest_v1.0.0.json"
+    },
+    {
+      "id": "osm-sv-gpkg-archive-20260823",
+      "path_from_dc_x": "x_red_social/data/savia_x/reference/operational/geography/source/el-salvador-260823-free.gpkg.zip",
+      "absolute_path_at_inventory": "/Users/josefelix/Desktop/DC_X/x_red_social/data/savia_x/reference/operational/geography/source/el-salvador-260823-free.gpkg.zip",
+      "format": "ZIP",
+      "size_bytes": 89476427,
+      "sha256": "dbe3f2a8dc6a895dedd7d61b6f5bee6a3a6a1c42377d56c3b0ff22b7feb47ea9",
+      "data_as_of": "2026-08-23T20:21:36Z",
+      "country_code": "SV",
+      "coordinate_order": "longitude,latitude",
+      "license": "ODbL-1.0",
+      "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "attribution": "© OpenStreetMap contributors",
+      "processor": "Geofabrik GmbH",
+      "role": "provenance_and_license_evidence",
+      "source_url": "https://download.geofabrik.de/central-america/el-salvador-260823-free.gpkg.zip",
+      "access": "read_only",
+      "archive_members": [
+        "README",
+        "el-salvador.gpkg"
+      ],
+      "gpkg_member_sha256": "6ad7bcc0d2b8801e9f00871108d3953feff8fabcce71288b8c0e10ea25fe45f8",
+      "readme_member_sha256": "e56536ed7b3584cc6479083c2cd8f029f79f4410add427212759d30925a416cf"
+    }
+  ]
+}

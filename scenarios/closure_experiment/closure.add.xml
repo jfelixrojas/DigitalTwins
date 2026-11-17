@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<additional>
+  <rerouter id="virtual_closure" edges="198404000" probability="1">
+    <interval begin="0" end="1800">
+      <closingReroute id="1257993561#5" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone passenger"/>
+    </interval>
+  </rerouter>
+</additional>

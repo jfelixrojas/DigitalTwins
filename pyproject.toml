@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=70"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "digitaltwins"
+version = "0.1.0"
+description = "Laboratorio experimental de movilidad urbana de El Salvador"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+visualization = ["matplotlib>=3.10,<4", "pyproj>=3.7,<4"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
