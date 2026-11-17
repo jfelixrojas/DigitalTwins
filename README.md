@@ -5,12 +5,11 @@ conteos vehiculares, registros semafóricos y Waze. El propósito y los límites
 están en [docs/concept.md](docs/concept.md). La infraestructura real es una
 fuente de observación; toda intervención se simula en un entorno aislado.
 
-La intervención 004 compara la base controlada con un cierre virtual efectivo
-de `1257993561#5`, Roosevelt hacia el este. **Los 150 vehículos completan ambos
-escenarios**; los 45 W_E se desvían sin atravesar el enlace cerrado. El recorrido
-medio aumenta de 132,90 a 135,60 s (+2,03 %), aunque baja `timeLoss`. Dos corridas
-del cierre reproducen métricas, rutas ejecutadas y permisos. Es un experimento
-sintético; el gemelo aún no está calibrado.
+La intervención 005 evalúa el cierre de `1257993561#5` con cinco cronogramas y
+tres desfases semafóricos virtuales. **Los 150 viajes completan los 15 pares**.
+El cambio de tiempo total varía de −19 a +405 s: 14 pares empeoran y uno mejora.
+La mediana W_E aumenta entre 14 y 16 s en todos. El +2,03 % original depende
+de la configuración temporal; el laboratorio continúa sin calibración real.
 
 CTM será la referencia física experimental y LTM el comparador; SUMO es el
 entorno microscópico inicial. No hay modelos CTM, LTM o IA implementados.
@@ -23,6 +22,90 @@ los enlaces de los informes a esa carpeta corresponden a evidencias locales.
 Clonar este repositorio no descarga esas fuentes ni los resultados verificados.
 Las recetas requieren los insumos locales fijados en
 [data/osm/sources.json](data/osm/sources.json) y las herramientas documentadas.
+
+## Comparación sincronizada NiceGUI — intervención 008
+
+~~~sh
+./scripts/run_nicegui.sh
+~~~
+
+Abrir [DigitalTwins local](http://127.0.0.1:8087). El botón **Comparar base y
+cierre** muestra Original/0 con dos mapas y un único reloj, pausa, reinicio y
+velocidad. El modo **Un mapa** conserva la selección base/cierre.
+
+Se puede elegir un ID original o pulsar un vehículo para comparar sus
+posiciones, rutas ejecutadas y estados en ambos escenarios. No hay
+interpolación. En móvil, el reloj queda accesible al recorrer los mapas;
+indicadores y gráficos se pueden expandir y contraer.
+
+No se añadieron dependencias ni se ejecutan simulaciones desde la interfaz.
+La salida nueva está en outputs/nicegui_comparison/; las evidencias originales
+de la 007 y el visor 006 permanecen intactos.
+[Informe, pruebas y capturas](docs/nicegui_comparison_report.md).
+
+## Prototipo NiceGUI — intervención 007
+
+Desde esta raíz:
+
+~~~sh
+./scripts/run_nicegui.sh
+~~~
+
+Abrir [http://127.0.0.1:8087](http://127.0.0.1:8087). La aplicación se limita
+a loopback y funciona sin Internet: Leaflet usa geometrías locales y ECharts
+se sirve con NiceGUI. Incluye Original/0 base y cierre, reproducción FCD
+nativa de 1 s, selección de enlaces, indicadores, comparación por movimiento
+y vehículos activos. Los controles no ejecutan simulaciones.
+
+El entorno está aislado en .venv-nicegui. Preparación, versiones fijadas,
+capturas y evaluación: [informe del prototipo](docs/nicegui_prototype_report.md).
+El [visor HTML 006](outputs/visualization/index.html) permanece intacto y
+conserva la matriz completa y sus cuatro animaciones sin servidor.
+
+## Consultar las simulaciones — intervención 006
+
+Abrir [el visor HTML local](outputs/visualization/index.html) con doble clic.
+Funciona sin conexión y sin servidor. Incluye las 15 comparaciones, señales
+virtuales y cuatro reproducciones FCD completas de 1 s: Original/0 y J103/0,
+base y cierre. Las posiciones de los demás pares no se inventan.
+
+Para regenerarlo desde las evidencias locales ya disponibles:
+
+~~~sh
+PYTHONPATH=src python3 -B -m digitaltwins.visualization
+~~~
+
+Solo usa la biblioteca estándar Python y no ejecuta SUMO. El paquete HTML
+integra sus datos y controles; no requiere CDN, mapas externos ni instalaciones.
+El [catálogo de simulaciones](docs/simulations/README.md) contiene las cuatro
+fichas generadas. El [flujo OSM–SUMO](docs/sumo_osm_workflow.md) explica el
+laboratorio y el [informe del visor](docs/visualization_report.md) documenta
+fuentes, pruebas y límites. Hay alternativas PNG/SVG en
+[outputs/visualization/figures/](outputs/visualization/figures/).
+
+El código y las fichas son versionables; el HTML, las figuras y los datos de
+outputs son productos locales. Para compartir el visor operativo basta copiar
+index.html; para conservar también sus enlaces documentales y evidencias,
+mantener la estructura del proyecto. Todas las señales y los viajes son
+simulados; el laboratorio continúa sin calibración real.
+
+## Reproducir la sensibilidad temporal — intervención 005
+
+```sh
+PYTHONPATH=src python3 -B -m digitaltwins.sensitivity --output outputs/closure_sensitivity_reproduction
+```
+
+La salida debe ser nueva. El comando recupera primero los +405 s originales,
+ejecuta 15 pares base/cierre y repite uno nuevo. Mantiene semilla SUMO 42,
+verifica cronogramas distintos y estados semafóricos efectivos, y produce
+tablas descriptivas y cinco figuras. Usa las herramientas existentes y
+sockets TraCI locales temporales.
+
+Resultados: [informe](docs/closure_sensitivity_report.md),
+[matriz](outputs/closure_sensitivity/matrix_comparison.csv),
+[descriptivos](outputs/closure_sensitivity/summary.json),
+[repetición](outputs/closure_sensitivity/reproducibility.json) y
+[receta](scenarios/closure_sensitivity/README.md).
 
 ## Reproducir el cierre virtual — intervención 004
 
@@ -130,6 +213,8 @@ evidencias en `outputs/intervention002/` detallan la instalación.
   origen-destino, tasas periódicas, diagnósticos y reglas de comparación futura.
 - [Cierre virtual](scenarios/closure_experiment/README.md): cierre efectivo,
   rutas realmente ejecutadas, conservación de demanda y comparación emparejada.
+- [Sensibilidad temporal](scenarios/closure_sensitivity/README.md): variación
+  reproducible de salidas y desfases, con estados semafóricos comprobados.
 
 Los originales permanecen en `../savia-x-lab` y `../x_red_social`. Los caminos
 del manifiesto se resuelven desde el directorio padre `DC_X`, por lo que el
@@ -148,7 +233,7 @@ DigitalTwins/
 ├── data/osm/             # manifiesto y notas; sin extractos duplicados
 ├── scenarios/            # piloto aleatorio y especificación controlada
 ├── src/digitaltwins/     # ejecutores, diagnóstico y figuras
-├── tests/                # 25 pruebas de rutas, cierres, unidades y balances
+├── tests/                # 56 pruebas Python y 10 pruebas JavaScript
 └── outputs/              # productos generados, excluidos de Git
 ```
 

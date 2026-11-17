@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "reference": "outputs/closure_experiment_verified",
+  "simulation_seed": 42,
+  "schedule_seeds": [null, 101, 102, 103, 104],
+  "jitter_bound_s": 15,
+  "schedule_rule": "For each stream in the original specification order, draw integer departures uniformly from [max(0, original-15, previous+1), min(899, original+15)] using random.Random(seed). Preserve IDs, OD, vehicle attributes and strict within-stream order. Original schedule is copied byte-for-byte.",
+  "global_extra_offsets_s": [0, 30, 60],
+  "offset_rule": "Additional tlLogic with the same id/programID and offset=(original+extra)%90, without phase definitions.",
+  "high_additional_delay_threshold_s": 60,
+  "focal_vehicles": ["N_E.0007", "N_E.0013"],
+  "focal_signal": "4011718406",
+  "repeat_combination": "jitter101_offset030",
+  "classification": "Descriptive deterministic sensitivity, no population confidence intervals or real traffic predictions."
+}

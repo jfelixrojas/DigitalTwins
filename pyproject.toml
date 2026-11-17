@@ -12,6 +12,7 @@ dependencies = []
 
 [project.optional-dependencies]
 visualization = ["matplotlib>=3.10,<4", "pyproj>=3.7,<4"]
+nicegui = ["nicegui==4.0.0", "pyproj==3.7.2"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

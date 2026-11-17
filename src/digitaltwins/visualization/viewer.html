@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: file:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>DigitalTwins · Simulaciones del corredor Roosevelt</title>
+<!--STYLE-->
+</head>
+<body>
+<header class="masthead">
+  <div class="identity"><span class="mark" aria-hidden="true">DT</span><div><p class="eyebrow">Laboratorio de movilidad · El Salvador</p><h1>DigitalTwins</h1></div></div>
+  <span class="badge">Evidencia sintética · sin calibración real</span>
+</header>
+<main>
+  <div class="intro"><div><p class="eyebrow">San Salvador / Alameda Franklin Delano Roosevelt</p><h2>Explorar lo que ocurrió en la simulación</h2><p>Geometría, recorridos y resultados guardados. Todo funciona localmente, sin mapas ni servicios externos.</p></div><a class="text-link" href="../../docs/sumo_osm_workflow.md">Cómo funciona el laboratorio ↗</a></div>
+  <nav class="tabs" aria-label="Secciones del visor">
+    <button type="button" data-tab="explore" aria-pressed="true">Simulación</button>
+    <button type="button" data-tab="sensitivity" aria-pressed="false">Sensibilidad temporal</button>
+    <button type="button" data-tab="catalog" aria-pressed="false">Experimentos</button>
+    <button type="button" data-tab="sources" aria-pressed="false">Fuentes y método</button>
+  </nav>
+
+  <section id="tab-explore" class="tab-panel">
+    <div class="selection-bar">
+      <label>Combinación <select id="case-select"></select></label>
+      <div class="scenario-control" role="group" aria-label="Escenario representado">
+        <button type="button" data-scenario="base" aria-pressed="true">Base</button><button type="button" data-scenario="closure" aria-pressed="false">Cierre virtual</button>
+      </div>
+      <button type="button" id="current-sheet" class="quiet">Ficha SIM-005 ↗</button>
+    </div>
+    <p id="selection-detail" class="selection-detail" aria-live="polite"></p>
+    <div class="stats">
+      <article class="stat"><span>Viajes completados / solicitados</span><strong id="stat-completed"></strong><small id="stat-pending"></small></article>
+      <article class="stat"><span>Tiempo total del escenario</span><strong id="stat-total"></strong><small id="stat-delta"></small></article>
+      <article class="stat"><span>Recorrido medio por vehículo</span><strong id="stat-mean"></strong><small id="stat-length"></small></article>
+    </div>
+    <div class="workspace">
+      <section class="panel map-panel" aria-labelledby="map-heading">
+        <div class="panel-heading"><div><h3 id="map-heading">Corredor y movimientos</h3><p id="map-status"></p></div><span id="scenario-badge" class="scenario-badge">Base</span></div>
+        <div class="map-wrap">
+          <svg id="road-map" class="road-map" role="img" aria-label="Geometría SUMO local, vehículos FCD y conexiones semaforizadas"><title>Corredor Roosevelt en San Salvador</title><g id="road-layer"></g><g id="route-layer"></g><g id="signal-layer"></g><g id="selection-layer"></g><g id="vehicle-layer"></g></svg>
+          <div class="map-tools" role="group" aria-label="Escala del mapa"><button type="button" id="zoom-in" aria-label="Acercar mapa">+</button><button type="button" id="zoom-out" aria-label="Alejar mapa">−</button><button type="button" id="zoom-reset">Encuadrar</button></div>
+          <span class="north" aria-label="Norte hacia arriba">↑ N</span>
+          <p id="animation-notice" class="map-notice"></p>
+        </div>
+        <div class="map-legend"><span><i class="swatch base"></i>Ruta W_E base</span><span><i class="swatch closure"></i>Desvío ejecutado</span><span id="closure-legend"></span><span><i class="dot green"></i><i class="dot amber"></i><i class="dot red"></i>Señales virtuales</span></div>
+        <div id="movement-legend" class="movement-legend"></div>
+        <div class="timeline">
+          <div class="transport"><button type="button" id="play" class="primary" aria-pressed="false">Reproducir</button><button type="button" id="back" aria-label="Retroceder un segundo">−1 s</button><button type="button" id="forward" aria-label="Avanzar un segundo">+1 s</button><label>Velocidad <select id="speed"><option value="1">1×</option><option value="5" selected>5×</option><option value="10">10×</option><option value="30">30×</option></select></label><output id="clock" for="time-slider">0 s</output></div>
+          <input id="time-slider" type="range" min="0" max="1799" step="1" value="0" aria-label="Tiempo de simulación en segundos">
+          <p id="time-resolution" class="muted"></p>
+        </div>
+      </section>
+      <aside class="side-panels">
+        <section class="panel"><div class="panel-heading"><h3>Base frente a cierre</h3><span class="muted">cierre − base</span></div><div class="table-wrap"><table class="metric-table"><thead><tr><th>Indicador</th><th>Base</th><th>Cierre</th><th>Δ</th></tr></thead><tbody id="metric-body"></tbody></table></div><p class="help">El tiempo total y los completados son los indicadores principales. <code>waitingTime</code> y <code>timeLoss</code> se solapan; no se suman.</p></section>
+        <section class="panel"><div class="panel-heading"><h3>Vehículos activos en la red</h3><span class="muted">vehículos</span></div><svg id="active-chart" class="chart" role="img" aria-label="Vehículos activos base y cierre a lo largo del tiempo"></svg><p class="help"><span class="line-key base"></span>Base <span class="line-key closure"></span>Cierre · incluye conexiones internas.</p></section>
+        <section class="panel"><h3>Enlaces de interés</h3><div id="edge-shortcuts" class="edge-shortcuts"></div><label class="block-label">Consultar enlace <select id="edge-select"></select></label><p id="edge-attributes" class="help"></p><div id="edge-totals"></div><p id="edge-interval-label" class="muted"></p><svg id="edge-chart" class="chart" role="img" aria-label="Flujo de entrada por intervalos"></svg><div id="edge-current" class="help"></div></section>
+      </aside>
+    </div>
+    <section class="panel lower-panel"><div class="panel-heading"><div><h3>Resultados por movimiento</h3><p>Los mismos vehículos dentro de cada comparación.</p></div><span class="badge subdued">OD = origen–destino</span></div><div class="table-wrap"><table><thead><tr><th>Movimiento</th><th>Viajes</th><th>Recorrido base (s)</th><th>Cierre (s)</th><th>Δ (s)</th><th>Δ detenido (s)</th><th>Δ timeLoss (s)</th><th>Δ longitud (m)</th></tr></thead><tbody id="movement-body"></tbody></table></div></section>
+    <section class="panel lower-panel"><div class="panel-heading"><div><h3>Los dos casos N_E investigados</h3><p>Umbral descriptivo de demora adicional elevada: +60 s.</p></div><button type="button" id="jump-NE" class="quiet">Ir a la aproximación</button></div><div id="NE-cases" class="NE-grid"></div><p class="help">La primera muestra en aproximación no equivale a una cola ni a la llegada exacta a la línea de detención. Los estados registrados no bastan para atribuir todo el retraso a saturación.</p></section>
+  </section>
+
+  <section id="tab-sensitivity" class="tab-panel" hidden>
+    <div class="section-heading"><p class="eyebrow">SIM-005 · 15 pares equivalentes</p><h2>El efecto depende del momento</h2><p>Cada celda compara el mismo calendario y desfase entre base y cierre. Selecciona una para explorar sus resultados.</p></div>
+    <div id="sensitivity-stats" class="stats"></div>
+    <div class="panel"><div class="table-wrap"><table class="matrix"><thead><tr><th>Cronograma</th><th>0 s</th><th>+30 s</th><th>+60 s</th></tr></thead><tbody id="matrix-body"></tbody></table></div><p class="help">Desfases adicionales respecto a los programas originales. Rojo: más tiempo total. Azul: menos tiempo. Los 15 diseños son descriptivos, no una muestra poblacional ni un intervalo de confianza.</p></div>
+    <div class="panel lower-panel"><h3>Qué está respaldado</h3><p id="sensitivity-conclusion"></p><p class="help">Se puede explorar sensibilidad de demanda conservando varias condiciones temporales; el +2,03 % original no es un efecto fijo ni una predicción operacional.</p><a class="text-link" href="figures/sensitivity_matrix.svg">Abrir figura estática ↗</a></div>
+  </section>
+
+  <section id="tab-catalog" class="tab-panel" hidden><div class="section-heading"><p class="eyebrow">Cuatro experimentos documentados</p><h2>Catálogo de simulaciones</h2><p>Qué se preguntó, qué cambió y qué permiten concluir las evidencias.</p></div><div id="catalog-grid" class="catalog-grid"></div><p class="help">Solo SIM-005 tiene FCD y estados de señales por segundo. Las posiciones de experimentos anteriores no se reconstruyen a partir de promedios.</p><a class="text-link" href="../../docs/simulations/README.md">Abrir catálogo documental ↗</a></section>
+
+  <section id="tab-sources" class="tab-panel" hidden><div class="section-heading"><p class="eyebrow">Procedencia y límites</p><h2>Del mapa a la evidencia</h2><p>El visor consulta resultados guardados. Sus fuentes, hashes y resolución se pueden revisar aquí.</p></div>
+    <div class="workflow"><span>Cartografía OSM</span><b>→</b><span>Red vial SUMO</span><b>→</b><span>Viajes sintéticos</span><b>→</b><span>Simulación</span><b>→</b><span>Evidencia verificada</span></div>
+    <div class="classification-grid"><article class="panel"><h3>Cartografía de origen</h3><p>OpenStreetMap / Geofabrik. Describe geometría y etiquetas disponibles; no es una medición validada de capacidad.</p></article><article class="panel"><h3>Atributos inferidos</h3><p>SUMO completa carriles, velocidades y conexiones. Los valores predeterminados se identifican al seleccionar un enlace.</p></article><article class="panel"><h3>Parámetros sintéticos</h3><p>Viajes, horarios, conducción y programas semafóricos virtuales. Toda modificación ocurre en el laboratorio.</p></article><article class="panel"><h3>Observaciones y estimaciones</h3><p>No hay conteos, Waze, registros reales ni estimaciones CTM/LTM integradas en estos experimentos.</p></article></div>
+    <div class="panel lower-panel"><h3>Resolución del paquete</h3><ul><li>Cuatro reproducciones FCD: Original/0 y J103/0, base y cierre.</li><li>Posiciones nativas cada 1 s, sin interpolación.</li><li>Señales nativas comprimidas sin pérdida a cambios de fase; conexiones identificadas por <code>tl</code> y <code>linkIndex</code>.</li><li>Agregados de 15 pares, totales de los 350 enlaces y series de 60 s en cinco enlaces de interés.</li><li>Ocupación porcentual, vehículos presentes y flujo son medidas distintas.</li></ul><p><a class="text-link" href="source_catalog.json">Catálogo completo de fuentes ↗</a> · <a class="text-link" href="manifest.json">Manifiesto del visor ↗</a> · <a class="text-link" href="../../docs/sumo_osm_workflow.md">Flujo técnico OSM–SUMO ↗</a></p></div>
+    <div class="panel lower-panel"><h3>Figuras estáticas verificadas</h3><p class="help">También se pueden abrir directamente, sin ejecutar JavaScript.</p><ul><li>Matriz temporal: <a href="figures/sensitivity_matrix.png">PNG</a> · <a href="figures/sensitivity_matrix.svg">SVG</a></li><li>Impactos W_E: <a href="figures/WE_impacts.png">PNG</a> · <a href="figures/WE_impacts.svg">SVG</a></li><li>Rutas base y desvío: <a href="figures/closure_routes.png">PNG</a> · <a href="figures/closure_routes.svg">SVG</a></li><li>Componentes de la red: <a href="figures/network_components.png">PNG</a> · <a href="figures/network_components.svg">SVG</a></li></ul></div>
+    <details class="panel lower-panel"><summary>Archivos fuente utilizados</summary><div class="table-wrap"><table><thead><tr><th>Archivo</th><th>Uso</th><th>SHA-256, prefijo</th></tr></thead><tbody id="source-body"></tbody></table></div></details>
+    <div class="panel lower-panel"><h3>Regenerar este visor</h3><code class="command">PYTHONPATH=src python3 -B -m digitaltwins.visualization</code><p class="help">Desde DigitalTwins, con las evidencias locales disponibles. No ejecuta simulaciones, instala software ni consulta servicios externos.</p></div>
+  </section>
+  <div id="runtime-error" role="alert" hidden></div>
+</main>
+<footer><span>© OpenStreetMap contributors / Geofabrik · ODbL 1.0</span><span>Estados simulados · sin calibración física · sin control de infraestructura real</span></footer>
+<dialog id="sheet-dialog"><button type="button" id="close-sheet" class="dialog-close" aria-label="Cerrar ficha">Cerrar ×</button><div id="sheet-content"></div></dialog>
+<noscript>Activa JavaScript para consultar la reproducción interactiva. Alternativas estáticas: <a href="figures/sensitivity_matrix.png">matriz temporal</a>, <a href="figures/closure_routes.png">rutas y desvío</a>, <a href="../../docs/simulations/README.md">catálogo documental</a>.</noscript>
+<!--DATA-->
+<!--SCRIPT-->
+</body>
+</html>
